@@ -4,7 +4,7 @@ from data.oracle import Oracle
 
 def gradient(
         f: Oracle, bounds: List[Tuple[Float, Float]],
-        it: int = 1000, eps: float = None, learning_rate: float = 0.01,
-        step_optimizer: Union[None, Callable[..., float]] = None
+        learning_rate: Union[float, Callable[..., float]],
+        iterations: int = 1000, eps: float = None,
 ):
     pass
