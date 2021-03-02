@@ -1,6 +1,5 @@
-from common.optimizer import Optimizer
+from optimize.optimizer import Optimizer
 from common.oracle import Oracle
-
 from gradient import gradient_descent
 
 import numpy as np
