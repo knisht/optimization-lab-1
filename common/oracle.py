@@ -30,9 +30,9 @@ class Oracle:
         assert step is not None and step != 0.0
         grad = np.zeros((self.n,))
         value = self.f(*args)
-        for i in range(n):
+        for i in range(self.n):
             args[i] += step
-            grad[i] = (f(*args) - value) / step
+            grad[i] = (self.f(*args) - value) / step
             args[i] -= step
 
         return grad

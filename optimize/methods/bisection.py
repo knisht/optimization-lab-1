@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from common.optimizer import Optimizer
+from optimize.optimizer import Optimizer
 
 
 class BisectionOptimizer(Optimizer):

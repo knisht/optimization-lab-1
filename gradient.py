@@ -3,7 +3,7 @@ from typing import Callable, List, Tuple, Union
 import numpy as np
 
 from common.oracle import Oracle
-from common.optimizer import Optimizer
+from optimize.optimizer import Optimizer
 
 
 def gradient_descent(

@@ -1,7 +1,7 @@
 from typing import Tuple
 from math import sqrt
 
-from common.optimizer import Optimizer
+from optimize.optimizer import Optimizer
 
 
 class GoldenRatioOptimizer(Optimizer):
