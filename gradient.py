@@ -8,12 +8,12 @@ from optimize.optimizer import Optimizer
 
 def gradient_descent(
         f: Oracle, x0: np.ndarray, step_optimizer: Callable[[Callable], Optimizer],
-        iterations: int = 1000, dx: Union[None, float] = None, df: Union[None, float] = None
-) -> np.ndarray:
+        iterations: int = None, dx: Union[None, float] = None, df: Union[None, float] = None
+) -> Tuple[np.ndarray, int]:
     x = x0
     it = 0
 
-    while it < iterations:
+    while (iterations is None) or (it < iterations):
         grad = f.grad(*x)
 
         def g(lmbd):
@@ -29,4 +29,4 @@ def gradient_descent(
         it += 1
         x = x1
 
-    return x
+    return x, it
