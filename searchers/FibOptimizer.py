@@ -9,19 +9,19 @@ class FibOptimizer(Optimizer):
         super().__init__(f, bounds, eps)
         self.F = []
         self.n = self.genF(a, b, window)
-        self.k = 1
+        self.k = 0
 
         self.l = [0.0] * (self.n + 1)
-        self.l[1] = a + self.F[self.n - 2] / self.F[self.n] * (b - a)
+        self.l[0] = a + self.F[self.n - 2] / self.F[self.n] * (b - a)
 
         self.mu = [0.0] * (self.n + 1)
-        self.mu[1] = a + self.F[self.n - 1] / self.F[self.n] * (b - a)
+        self.mu[0] = a + self.F[self.n - 1] / self.F[self.n] * (b - a)
 
         self.a = [0.0] * (self.n + 1)
-        self.a[1] = a
+        self.a[0] = a
 
         self.b = [0.0] * (self.n + 1)
-        self.b[1] = b
+        self.b[0] = b
 
     def _step(self, a: float, b: float) -> Tuple[float, float]:
         """
@@ -59,7 +59,7 @@ class FibOptimizer(Optimizer):
 
     def genF(self, a, b, l):
         min = (b - a) / l
-        self.F = [0, 0, 1]
+        self.F = [0, 1]
         while self.F[-1] < min:
             self.F = self.F[-1] + self.F[-2]
         return len(self.F)
