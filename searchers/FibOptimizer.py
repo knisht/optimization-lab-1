@@ -62,4 +62,4 @@ class FibOptimizer(Optimizer):
         self.F = [0, 1]
         while self.F[-1] < min:
             self.F = self.F[-1] + self.F[-2]
-        return len(self.F)
+        return len(self.F) - 1
