@@ -22,6 +22,7 @@ class FibonacciOptimizer(Optimizer):
         self.b = [0.0] * (self.n + 1)
         self.b[0] = b
 
+    # TODO я поменял сигнатуру _step и optimize, предлагаю тут вообще _step выкинуть и просто переопределить optimize
     def _step(self, a: float, b: float) -> Tuple[float, float]:
         n = self.n
         k = self.k
