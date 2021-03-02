@@ -2,8 +2,8 @@ from typing import Callable, List, Tuple, Union
 
 import numpy as np
 
-from utils.oracle import Oracle
-from utils.optimizer import Optimizer
+from common.oracle import Oracle
+from common.optimizer import Optimizer
 
 
 def gradient_descent(

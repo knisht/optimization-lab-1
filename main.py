@@ -1,5 +1,5 @@
-from utils.optimizer import Optimizer
-from utils.oracle import Oracle
+from common.optimizer import Optimizer
+from common.oracle import Oracle
 
 from gradient import gradient_descent
 

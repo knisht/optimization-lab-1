@@ -1,10 +1,9 @@
 from typing import Tuple, Callable
 
-from utils.optimizer import Optimizer
+from common.optimizer import Optimizer
 
 
-class FibOptimizer(Optimizer):
-
+class FibonacciOptimizer(Optimizer):
     def __init__(self, f: Callable[[float], float], bounds: Tuple[float, float], eps: float, a, b, window):
         super().__init__(f, bounds, eps)
         self.F = []
@@ -24,10 +23,6 @@ class FibOptimizer(Optimizer):
         self.b[0] = b
 
     def _step(self, a: float, b: float) -> Tuple[float, float]:
-        """
-        :return: new bounds
-            example. the below implementation is a ternary search
-        """
         n = self.n
         k = self.k
         if self.f(self.l[k]) > self.f(self.mu[k]):

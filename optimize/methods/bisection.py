@@ -1,14 +1,10 @@
 from typing import Tuple
 
-from utils.optimizer import Optimizer
+from common.optimizer import Optimizer
 
 
 class BisectionOptimizer(Optimizer):
     def _step(self, a: float, b: float) -> Tuple[float, float]:
-        """
-        :return: new bounds
-            example. the below implementation is a ternary search
-        """
         if self.f(a) * self.f(b) > 0:
             raise Exception("No root found")
         else:
