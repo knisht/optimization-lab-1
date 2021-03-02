@@ -12,9 +12,9 @@ class BisectionOptimizer(Optimizer):
         if self.f(a) * self.f(b) > 0:
             raise Exception("No root found")
         else:
-            midpoint = (a + b) / 2.0
-            if self.f(a) * self.f(midpoint) < 0:  # Increasing but below 0 case
-                b = midpoint
+            mid = (a + b) / 2.0
+            if self.f(a) * self.f(mid) < 0:
+                b = mid
             else:
-                a = midpoint
-            return a, b
+                a = mid
+        return a, b
