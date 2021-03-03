@@ -98,6 +98,7 @@ def generate_iterations_graph(
 ):
     descent_results = list(map(lambda op: compute_iterations(f, jacobi, op, points, power), optimizers))
     fig, ax = plt.subplots()
+    ax.set_xlabel('-log_10(eps)')
     for iterations, optimizer_name, color in zip(descent_results, optimizer_names, optimizer_colors):
         ax.plot(range(power + 1), iterations, color, label=optimizer_name)
     ax.legend()
