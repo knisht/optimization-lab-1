@@ -45,19 +45,22 @@ def compute_iterations(
     return iterations / len(initial_points)
 
 
+def __build_optimizer(op):
+    return lambda g: op(g, (0, 0.5), 0.05)
+
+
+optimizers = list(map(__build_optimizer, [Optimizer, BisectionOptimizer, GoldenRatioOptimizer]))
+# optimizers.append(lambda g: FibonacciOptimizer(f, (0, 0.5), 0.05, 0, 0.5, 0.5))
+trajectory_names = ['Ternary search', 'Golden ratio', 'Binary search', 'Fibonacci']
+trajectory_colors = ['r', 'b', 'g', 'k']
+
+
 def generate_graph(
         f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
         representation: str, func_name: str,
         xl: float, xr: float, yl: float, yr: float, points: List[np.ndarray],
         level_lines
 ):
-    def build_optimizer(op):
-        return lambda g: op(g, (0, 0.5), 0.05)
-
-    optimizers = list(map(build_optimizer, [Optimizer, BisectionOptimizer, GoldenRatioOptimizer]))
-    # optimizers.append(lambda g: FibonacciOptimizer(f, (0, 0.5), 0.05, 0, 0.5, 0.5))
-    trajectory_names = ['Ternary search', 'Golden ratio', 'Binary search', 'Fibonacci']
-    trajectory_colors = ['r', 'b', 'g', 'k']
     descent_results = list(map(lambda op: compute_trajectory(f, jacobi, op, points), optimizers))
     argmin = descent_results[0][0]
 
