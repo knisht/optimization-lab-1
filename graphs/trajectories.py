@@ -1,16 +1,18 @@
-from typing import Callable, Tuple
+from typing import Callable, Tuple, List
+
 import numpy as np
+from matplotlib import pyplot as plt
+
 from common.oracle import Oracle
 from gradient import gradient_descent
 from optimize.optimizer import Optimizer
 from optimize.methods.fibonacci import FibonacciOptimizer
 from optimize.methods.bisection import BisectionOptimizer
 from optimize.methods.golden_ratio import GoldenRatioOptimizer
-from matplotlib import pyplot as plt
 
 
 def compute_trajectory(f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
-                       optimizer: Callable[[Callable], Optimizer]) -> Tuple[np.ndarray, list[np.ndarray]]:
+                       optimizer: Callable[[Callable], Optimizer]) -> Tuple[np.ndarray, List[np.ndarray]]:
     oracle = Oracle(2, f, jacobi)
     initial_point = np.array([4.0, 4.0])
     argmin, _, trajectory = gradient_descent(f=oracle, x0=initial_point, step_optimizer=optimizer, df=1e-7,
@@ -52,7 +54,7 @@ def generate_graph(f: Callable[[float, float], float], jacobi: Callable[[float, 
     plt.show()
 
 
-def __plot_trajectory(ax, trajectory: list[np.ndarray], name: str):
+def __plot_trajectory(ax, trajectory: List[np.ndarray], name: str):
     x_trajectories = list(map(lambda t: t[0], trajectory))
     y_trajectories = list(map(lambda t: t[1], trajectory))
     ax.plot(x_trajectories, y_trajectories, label=name)

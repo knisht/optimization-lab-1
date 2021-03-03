@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 from common.oracle import Oracle
@@ -7,7 +9,7 @@ from optimize.optimizer import Optimizer
 from matplotlib import pyplot as plt
 
 
-def generate_graph(n: int, ks: list[float]):
+def generate_graph(n: int, ks: List[float]):
     iterations = []
     for k in ks:
         form, jacobi = generate_random_form(k, n)
@@ -29,6 +31,6 @@ def generate_graph(n: int, ks: list[float]):
     plt.show()
 
 
-def generate_graphs(ns: list[int], ks: list[float]):
+def generate_graphs(ns: List[int], ks: List[float]):
     for n in ns:
         generate_graph(n, ks)
