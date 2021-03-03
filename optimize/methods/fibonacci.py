@@ -28,7 +28,7 @@ class FibonacciOptimizer(Optimizer):
     def optimize(self) -> float:
         self.history = []
         lst = self.n - 1
-        for k in range(self.n):
+        for k in range(self.n - 1):
             self._log(self.a[k], self.b[k])
             if self.f(self.l[k]) > self.f(self.mu[k]):
                 self.a[k + 1] = self.l[k]
@@ -46,8 +46,8 @@ class FibonacciOptimizer(Optimizer):
             if k != lst - 2:
                 continue
 
-            self.l[self.n] = self.l[self.n - 1]
-            self.mu[self.n] = self.l[self.n - 1] + self.eps
+            self.l[lst] = self.l[lst]
+            self.mu[lst] = self.l[lst] + self.eps
 
             if self.f(self.l[lst]) == self.f(self.mu[lst]):
                 self.a[lst] = self.mu[lst]

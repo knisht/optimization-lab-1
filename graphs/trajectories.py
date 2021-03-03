@@ -51,7 +51,7 @@ def __build_optimizer(op):
     return lambda g: op(g, (0, 0.5), 0.05)
 
 
-optimizers = list(map(__build_optimizer, [Optimizer, BisectionOptimizer, GoldenRatioOptimizer]))
+optimizers = list(map(__build_optimizer, [Optimizer, BisectionOptimizer, GoldenRatioOptimizer, FibonacciOptimizer]))
 # optimizers.append(lambda g: FibonacciOptimizer(f, (0, 0.5), 0.05, 0, 0.5, 0.5))
 optimizer_names = ['Ternary search', 'Golden ratio', 'Binary search', 'Fibonacci']
 optimizer_colors = ['r', 'b', 'g', 'k']
