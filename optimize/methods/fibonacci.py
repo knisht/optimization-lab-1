@@ -15,10 +15,10 @@ class FibonacciOptimizer(Optimizer):
 
 
         self.l = [0.0] * self.n
-        self.l[0] = a0 + self.F[self.n - 2] / self.F[self.n] * (b0 - a0)
+        self.l[0] = a0 + self.F[self.n - 2] / self.F[self.n - 1] * (b0 - a0)
 
         self.mu = [0.0] * self.n
-        self.mu[0] = a0 + self.F[self.n - 1] / self.F[self.n] * (b0 - a0)
+        self.mu[0] = a0 + self.F[self.n - 1] / self.F[self.n - 1] * (b0 - a0)
 
         self.a = [0.0] * self.n
         self.a[0] = a0
@@ -35,25 +35,25 @@ class FibonacciOptimizer(Optimizer):
                 self.a[k + 1] = self.l[k]
                 self.b[k + 1] = self.b[k]
                 self.l[k + 1] = self.mu[k]
-                self.mu[k + 1] = self.a[k + 1] + self.F[n - k - 1] / self.F[n - k] * (self.b[k + 1] - self.a[k + 1])
+                self.mu[k + 1] = self.a[k + 1] + self.F[n - k - 1] / self.F[n - 1 - k] * (self.b[k + 1] - self.a[k + 1])
             else:
                 self.a[k + 1] = self.a[k]
                 self.b[k + 1] = self.mu[k]
                 self.mu[k + 1] = self.l[k]
-                self.l[k + 1] = self.a[k + 1] + self.F[n - k - 2] / self.F[n - k] * (self.b[k + 1] - self.a[k + 1])
+                self.l[k + 1] = self.a[k + 1] + self.F[n - k - 2] / self.F[n - 1 - k] * (self.b[k + 1] - self.a[k + 1])
 
             if k != self.n - 3:
                 continue
 
             self.l[self.n] = self.l[self.n - 1]
-            self.mu[self.n] = self.l[self.n] + self.eps
+            self.mu[self.n] = self.l[self.n - 1] + self.eps
 
-            if self.f(self.l[self.n]) == self.f(self.mu[n]):
-                self.a[n] = self.mu[n]
-                self.b[n] = self.b[n - 1]
+            if self.f(self.l[self.n - 1]) == self.f(self.mu[n - 1]):
+                self.a[n - 1] = self.mu[n - 1]
+                self.b[n - 1] = self.b[n - 1]
             else:
-                self.a[n] = self.a[n - 1]
-                self.b[n] = self.mu[n]
+                self.a[n - 1] = self.a[n - 1]
+                self.b[n - 1] = self.mu[n - 1]
 
         self._log(self.a[n - 1], self.b[n - 1])
         return (self.a[n - 1] + self.b[n - 1]) / 2
