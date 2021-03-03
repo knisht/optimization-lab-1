@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Callable
 from math import sqrt
 
 from optimize.optimizer import Optimizer

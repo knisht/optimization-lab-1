@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Callable
 
 from optimize.optimizer import Optimizer
 
@@ -20,4 +20,4 @@ class BisectionOptimizer(Optimizer):
 
     def _step(self, a: float, b: float) -> Tuple[float, float]:
         mid = (a + b) / 2.0
-        return mid - self.eps, mid + self.eps
+        return mid - self.eps / 3, mid + self.eps / 3

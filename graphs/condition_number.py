@@ -18,7 +18,7 @@ def generate_graph(n: int, ks: list[float]):
 
         initial_point = np.random.uniform(low=0.001, high=1.0, size=(n,))
         argmin, iteration, _ = gradient_descent(f=oracle, x0=initial_point, step_optimizer=ternary_search, df=1e-7,
-                                             dx=1e-7)
+                                                dx=1e-7)
         iterations.append(iteration)
 
     plt.grid(linestyle='--')
