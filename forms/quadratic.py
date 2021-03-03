@@ -26,7 +26,7 @@ def __quadratic_form(matrix: np.ndarray) -> Callable[..., float]:
 
 
 def __quadratic_form_jacobi(matrix: np.ndarray) -> Callable[..., np.ndarray]:
-    def computable(arglist: list[float]) -> np.ndarray:
+    def computable(arglist: List[float]) -> np.ndarray:
         n, _ = matrix.shape
         result = np.zeros((n,))
         for i in range(n):
