@@ -41,7 +41,9 @@ def compute_iterations(
         for d in range(1, power + 1):
             x, it, _ = gradient_descent(f=oracle, x0=x, step_optimizer=optimizer, df=eps, dx=eps)
             iterations[d] += it
+            eps /= 10.0
 
+    iterations = np.cumsum(iterations)
     return iterations / len(initial_points)
 
 
@@ -51,33 +53,8 @@ def __build_optimizer(op):
 
 optimizers = list(map(__build_optimizer, [Optimizer, BisectionOptimizer, GoldenRatioOptimizer]))
 # optimizers.append(lambda g: FibonacciOptimizer(f, (0, 0.5), 0.05, 0, 0.5, 0.5))
-trajectory_names = ['Ternary search', 'Golden ratio', 'Binary search', 'Fibonacci']
-trajectory_colors = ['r', 'b', 'g', 'k']
-
-
-def generate_graph(
-        f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
-        representation: str, func_name: str,
-        xl: float, xr: float, yl: float, yr: float, points: List[np.ndarray],
-        level_lines
-):
-    descent_results = list(map(lambda op: compute_trajectory(f, jacobi, op, points), optimizers))
-    argmin = descent_results[0][0]
-
-    v_func = np.vectorize(lambda x, y: f(x, y))
-    xx, yy = np.meshgrid(np.linspace(xl, xr, 100),
-                         np.linspace(yl, yr, 100))
-
-    fig, ax = plt.subplots()
-    qx = ax.contour(xx, yy, v_func(xx, yy), level_lines,
-                    linestyles=('solid'))
-    for (_, trajectories), trajectory_name, color in zip(descent_results, trajectory_names, trajectory_colors):
-        __plot_trajectory(ax, trajectories, trajectory_name, color)
-    ax.clabel(qx, fontsize=5, fmt='%.2f', inline=1)
-    ax.legend()
-    ax.set_title(func_name)
-    plt.savefig("results/" + representation + ".png")
-    plt.show()
+optimizer_names = ['Ternary search', 'Golden ratio', 'Binary search', 'Fibonacci']
+optimizer_colors = ['r', 'b', 'g', 'k']
 
 
 def __plot_trajectory(ax, trajectories: List[List[np.ndarray]], name: str, color: str):
@@ -90,6 +67,43 @@ def __plot_trajectory(ax, trajectories: List[List[np.ndarray]], name: str, color
             ok = True
         else:
             ax.plot(x_trajectories, y_trajectories, color, marker=',', linewidth=1, markersize=1)
+
+
+def generate_trajectories_graph(
+        f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
+        representation: str, func_name: str,
+        xl: float, xr: float, yl: float, yr: float, points: List[np.ndarray],
+        level_lines
+):
+    descent_results = list(map(lambda op: compute_trajectory(f, jacobi, op, points), optimizers))
+    v_func = np.vectorize(lambda x, y: f(x, y))
+    xx, yy = np.meshgrid(np.linspace(xl, xr, 100),
+                         np.linspace(yl, yr, 100))
+
+    fig, ax = plt.subplots()
+    qx = ax.contour(xx, yy, v_func(xx, yy), level_lines,
+                    linestyles=('solid'))
+    for (_, trajectories), trajectory_name, color in zip(descent_results, optimizer_names, optimizer_colors):
+        __plot_trajectory(ax, trajectories, trajectory_name, color)
+    ax.clabel(qx, fontsize=5, fmt='%.2f', inline=1)
+    ax.legend()
+    ax.set_title(func_name)
+    plt.savefig("results/" + representation + ".png")
+    plt.show()
+
+
+def generate_iterations_graph(
+        f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
+        representation: str, func_name: str, power: int, points: List[np.ndarray]
+):
+    descent_results = list(map(lambda op: compute_iterations(f, jacobi, op, points, power), optimizers))
+    fig, ax = plt.subplots()
+    for iterations, optimizer_name, color in zip(descent_results, optimizer_names, optimizer_colors):
+        ax.plot(range(power + 1), iterations, color, label=optimizer_name)
+    ax.legend()
+    ax.set_title(func_name)
+    plt.savefig("results/" + representation + ".png")
+    plt.show()
 
 
 def draw_all():
@@ -111,4 +125,5 @@ def draw_all():
     for f, jacobi, repr, f_name, (xl, xr, yl, yr), points, level_line in zip(functions, jacobies, representations,
                                                                              function_names, ranges, initial_points,
                                                                              level_lines):
-        generate_graph(f, jacobi, repr, f_name, xl, xr, yl, yr, points, level_line)
+        generate_trajectories_graph(f, jacobi, repr, f_name, xl, xr, yl, yr, points, level_line)
+        generate_iterations_graph(f, jacobi, repr + "_iter", f_name, 10, points)
