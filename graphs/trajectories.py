@@ -9,23 +9,48 @@ from optimize.methods.golden_ratio import GoldenRatioOptimizer
 from matplotlib import pyplot as plt
 
 
-def compute_trajectory(f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
-                       optimizer: Callable[[Callable], Optimizer], initial_points: List[np.ndarray]) -> Tuple[np.ndarray, List[List[np.ndarray]]]:
+def compute_trajectory(
+        f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
+        optimizer: Callable[[Callable], Optimizer], initial_points: List[np.ndarray]
+) -> Tuple[np.ndarray, List[List[np.ndarray]]]:
     oracle = Oracle(2, f, jacobi)
     trajectories = []
-    argmin, _, _ = gradient_descent(f=oracle, x0=initial_points[0], step_optimizer=optimizer, df=1e-7,
-                                             iterations=100, dx=1e-7)
+    argmin, _, _ = gradient_descent(
+        f=oracle, x0=initial_points[0], step_optimizer=optimizer,
+        df=1e-7, iterations=100, dx=1e-7
+    )
+
     for point in initial_points:
-        _, _, trajectory = gradient_descent(f=oracle, x0=point, step_optimizer=optimizer, df=1e-7, iterations=100, dx=1e-7)
+        _, _, trajectory = gradient_descent(
+            f=oracle, x0=point, step_optimizer=optimizer,
+            df=1e-7, iterations=100, dx=1e-7
+        )
         trajectories.append(trajectory)
     return argmin, trajectories
 
 
-def generate_graph(f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
-                   representation: str,
-                   func_name: str,
-                   xl: float, xr: float, yl: float, yr: float, points: List[np.ndarray],
-                   level_lines):
+def compute_iterations(
+        f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
+        optimizer: Callable[[Callable], Optimizer], initial_points: List[np.ndarray], power: int = 10
+):
+    oracle = Oracle(2, f, jacobi)
+    iterations = np.zeros((power + 1,))
+
+    for point in initial_points:
+        x, eps = point, 1.0
+        for d in range(1, power + 1):
+            x, it, _ = gradient_descent(f=oracle, x0=x, step_optimizer=optimizer, df=eps, dx=eps)
+            iterations[d] += it
+
+    return iterations / len(initial_points)
+
+
+def generate_graph(
+        f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
+        representation: str, func_name: str,
+        xl: float, xr: float, yl: float, yr: float, points: List[np.ndarray],
+        level_lines
+):
     def build_optimizer(op):
         return lambda g: op(g, (0, 0.5), 0.05)
 
@@ -61,7 +86,7 @@ def __plot_trajectory(ax, trajectories: List[List[np.ndarray]], name: str, color
             ax.plot(x_trajectories, y_trajectories, color, marker=',', linewidth=1, markersize=1, label=name)
             ok = True
         else:
-            ax.plot(x_trajectories, y_trajectories, color, marker=',',  linewidth=1, markersize=1)
+            ax.plot(x_trajectories, y_trajectories, color, marker=',', linewidth=1, markersize=1)
 
 
 def draw_all():
@@ -80,5 +105,7 @@ def draw_all():
     level_lines = [[float(i + 1) / 20.0 for i in range(10)],
                    [float(i + 1) / 10.0 for i in range(10)],
                    [float(i + 1) / 7.0 for i in range(10)]]
-    for f, jacobi, repr, f_name, (xl, xr, yl, yr), points, level_line in zip(functions, jacobies, representations, function_names, ranges, initial_points, level_lines):
+    for f, jacobi, repr, f_name, (xl, xr, yl, yr), points, level_line in zip(functions, jacobies, representations,
+                                                                             function_names, ranges, initial_points,
+                                                                             level_lines):
         generate_graph(f, jacobi, repr, f_name, xl, xr, yl, yr, points, level_line)
