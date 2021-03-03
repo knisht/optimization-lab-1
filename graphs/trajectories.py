@@ -24,13 +24,15 @@ def compute_trajectory(f: Callable[[float, float], float], jacobi: Callable[[flo
 def generate_graph(f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
                    representation: str,
                    func_name: str,
-                   xl: float, xr: float, yl: float, yr: float, points: List[np.ndarray]):
+                   xl: float, xr: float, yl: float, yr: float, points: List[np.ndarray],
+                   level_lines):
     def build_optimizer(op):
-        return lambda g: op(g, (0, 0.5), 0.01)
+        return lambda g: op(g, (0, 0.5), 0.05)
 
     optimizers = list(map(build_optimizer, [Optimizer, BisectionOptimizer, GoldenRatioOptimizer]))
-    trajectory_names = ['Ternary search', 'Golden ratio', 'Binary search']
-    trajectory_colors = ['r', 'b', 'g']
+    # optimizers.append(lambda g: FibonacciOptimizer(f, (0, 0.5), 0.05, 0, 0.5, 0.5))
+    trajectory_names = ['Ternary search', 'Golden ratio', 'Binary search', 'Fibonacci']
+    trajectory_colors = ['r', 'b', 'g', 'k']
     descent_results = list(map(lambda op: compute_trajectory(f, jacobi, op, points), optimizers))
     argmin = descent_results[0][0]
 
@@ -39,11 +41,11 @@ def generate_graph(f: Callable[[float, float], float], jacobi: Callable[[float, 
                          np.linspace(yl, yr, 100))
 
     fig, ax = plt.subplots()
-    qx = ax.contour(xx, yy, v_func(xx, yy), [f(argmin[0], argmin[1]) + float(i)/3.0 for i in range(-10, 10)],
+    qx = ax.contour(xx, yy, v_func(xx, yy), level_lines,
                     linestyles=('solid'))
     for (_, trajectories), trajectory_name, color in zip(descent_results, trajectory_names, trajectory_colors):
         __plot_trajectory(ax, trajectories, trajectory_name, color)
-    ax.clabel(qx, fontsize=5, fmt='%.1f', inline=1)
+    ax.clabel(qx, fontsize=5, fmt='%.2f', inline=1)
     ax.legend()
     ax.set_title(func_name)
     plt.savefig("results/" + representation + ".png")
@@ -71,9 +73,12 @@ def draw_all():
                 lambda x, y: np.array([2 * x + y, 6 * y + x])]
     representations = ["func_1", "func_2", "func_3"]
     function_names = ["x^2 - 3xy + 5y^2", "4x^2 + 20y^2", "x^2 + xy + 3y^2"]
-    ranges = [(-2.0, 2.0, -1.5, 1.5), (-2.3, 3.0, -0.5, 1.0), (-2.5, 2.5, -1.5, 2.0)]
-    initial_points = [[np.array([-0.5, 0.5]), np.array([1.0, -0.5])],
-                      [np.array([2.0, 0.5]), np.array([-2.0, 0.5])],
-                      [np.array([2.0, 1.5]), np.array([-1.0, 1.0])]]
-    for f, jacobi, repr, f_name, (xl, xr, yl, yr), points in zip(functions, jacobies, representations, function_names, ranges, initial_points):
-        generate_graph(f, jacobi, repr, f_name, xl, xr, yl, yr, points)
+    ranges = [(-1.0, 1.0, -0.4, 0.6), (-0.75, 0.75, -0.3, 0.3), (-1.2, 1.6, -1.0, 1.0)]
+    initial_points = [[np.array([-0.2, -0.25]), np.array([0.25, -0.3])],
+                      [np.array([-0.5, -0.1]), np.array([0.5, 0.1])],
+                      [np.array([1.5, 0.5]), np.array([-1.0, 1.0])]]
+    level_lines = [[float(i + 1) / 20.0 for i in range(10)],
+                   [float(i + 1) / 10.0 for i in range(10)],
+                   [float(i + 1) / 7.0 for i in range(10)]]
+    for f, jacobi, repr, f_name, (xl, xr, yl, yr), points, level_line in zip(functions, jacobies, representations, function_names, ranges, initial_points, level_lines):
+        generate_graph(f, jacobi, repr, f_name, xl, xr, yl, yr, points, level_line)
