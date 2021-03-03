@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 
 
 def compute_trajectory(f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
-                       optimizer: Callable[[Callable], Optimizer], initial_points: List[np.ndarray]) -> Tuple[np.ndarray, list[list[np.ndarray]]]:
+                       optimizer: Callable[[Callable], Optimizer], initial_points: List[np.ndarray]) -> Tuple[np.ndarray, List[List[np.ndarray]]]:
     oracle = Oracle(2, f, jacobi)
     trajectories = []
     argmin, _, _ = gradient_descent(f=oracle, x0=initial_points[0], step_optimizer=optimizer, df=1e-7,
