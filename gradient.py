@@ -1,4 +1,4 @@
-from typing import Callable, List, Tuple, Union
+from typing import Callable, List, Tuple, Union, Optional
 
 import numpy as np
 
@@ -8,11 +8,11 @@ from optimize.optimizer import Optimizer
 
 def gradient_descent(
         f: Oracle, x0: np.ndarray, step_optimizer: Callable[[Callable], Optimizer],
-        iterations: int = None, dx: Union[None, float] = None, df: Union[None, float] = None
-) -> Tuple[np.ndarray, int, list[np.ndarray]]:
+        iterations: Optional[int] = None, dx: Optional[float] = None, df: Optional[float] = None
+) -> Tuple[np.ndarray, int, List[np.ndarray]]:
     x = x0
     it = 0
-    trajectory = []
+    trajectory = [x]
     while (iterations is None) or (it < iterations):
         grad = f.grad(*x)
 

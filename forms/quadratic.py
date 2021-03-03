@@ -1,10 +1,10 @@
-from typing import Tuple, Callable
+from typing import Tuple, Callable, List
 
 import numpy as np
 from scipy.stats import ortho_group
 
 
-def __generate_eigenvalues(dim: int, scale: float) -> list[float]:
+def __generate_eigenvalues(dim: int, scale: float) -> List[float]:
     min_eigen = np.random.random()
     max_eigen = min_eigen * scale
     if dim == 2:
@@ -14,7 +14,7 @@ def __generate_eigenvalues(dim: int, scale: float) -> list[float]:
 
 
 def __quadratic_form(matrix: np.ndarray) -> Callable[..., float]:
-    def computable(arglist: list[float]) -> float:
+    def computable(arglist: List[float]) -> float:
         res = 0.0
         n, m = matrix.shape
         for i in range(n):

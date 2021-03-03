@@ -29,7 +29,7 @@ class Optimizer:
                 b = x2
             else:
                 a = x1
-            print(a, b)
+            # print(a, b)
             self._log(a, b)
 
         return (a + b) / 2

@@ -1,4 +1,4 @@
-from typing import Callable, Union, List
+from typing import Callable, List, Optional
 
 import numpy as np
 
@@ -6,7 +6,7 @@ import numpy as np
 class Oracle:
     def __init__(
             self, n: int, f: Callable[..., float],
-            whitebox: Union[None, Callable[..., np.ndarray]]
+            whitebox: Optional[Callable[..., np.ndarray]]
     ):
         """
         :param n: function input dimension
