@@ -1,4 +1,4 @@
-from typing import Callable, Tuple
+from typing import Callable, Tuple, List
 import numpy as np
 from common.oracle import Oracle
 from gradient import gradient_descent
@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 
 
 def compute_trajectory(f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
-                       optimizer: Callable[[Callable], Optimizer], initial_points: list[np.ndarray]) -> Tuple[np.ndarray, list[list[np.ndarray]]]:
+                       optimizer: Callable[[Callable], Optimizer], initial_points: List[np.ndarray]) -> Tuple[np.ndarray, list[list[np.ndarray]]]:
     oracle = Oracle(2, f, jacobi)
     trajectories = []
     argmin, _, _ = gradient_descent(f=oracle, x0=initial_points[0], step_optimizer=optimizer, df=1e-7,
@@ -24,7 +24,7 @@ def compute_trajectory(f: Callable[[float, float], float], jacobi: Callable[[flo
 def generate_graph(f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
                    representation: str,
                    func_name: str,
-                   xl: float, xr: float, yl: float, yr: float, points: list[np.ndarray]):
+                   xl: float, xr: float, yl: float, yr: float, points: List[np.ndarray]):
     def build_optimizer(op):
         return lambda g: op(g, (0, 0.5), 0.01)
 
@@ -50,7 +50,7 @@ def generate_graph(f: Callable[[float, float], float], jacobi: Callable[[float, 
     plt.show()
 
 
-def __plot_trajectory(ax, trajectories: list[list[np.ndarray]], name: str, color: str):
+def __plot_trajectory(ax, trajectories: List[List[np.ndarray]], name: str, color: str):
     ok = False
     for trajectory in trajectories:
         x_trajectories = list(map(lambda t: t[0], trajectory))
