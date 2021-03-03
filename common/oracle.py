@@ -17,10 +17,15 @@ class Oracle:
         self.n = n
         self.f = f
         self.whitebox = whitebox
+        self.calls = 0
 
     def __call__(self, *args):
         assert len(args) == self.n
+        self.calls += 1
         return self.f(*args)
+
+    def reset(self):
+        self.calls = 0
 
     def grad(self, *args, step=None) -> np.ndarray:
         assert len(args) == self.n
@@ -36,3 +41,8 @@ class Oracle:
             args[i] -= step
 
         return grad
+
+    def stats(self):
+        return {
+            'calls': self.calls
+        }
