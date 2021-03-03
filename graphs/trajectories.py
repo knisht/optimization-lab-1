@@ -1,41 +1,37 @@
-from typing import Callable, Tuple, List
-
+from typing import Callable, Tuple
 import numpy as np
-from matplotlib import pyplot as plt
-
 from common.oracle import Oracle
 from gradient import gradient_descent
 from optimize.optimizer import Optimizer
 from optimize.methods.fibonacci import FibonacciOptimizer
 from optimize.methods.bisection import BisectionOptimizer
 from optimize.methods.golden_ratio import GoldenRatioOptimizer
+from matplotlib import pyplot as plt
 
 
 def compute_trajectory(f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
-                       optimizer: Callable[[Callable], Optimizer]) -> Tuple[np.ndarray, List[np.ndarray]]:
+                       optimizer: Callable[[Callable], Optimizer], initial_points: list[np.ndarray]) -> Tuple[np.ndarray, list[list[np.ndarray]]]:
     oracle = Oracle(2, f, jacobi)
-    initial_point = np.array([4.0, 4.0])
-    argmin, _, trajectory = gradient_descent(f=oracle, x0=initial_point, step_optimizer=optimizer, df=1e-7,
+    trajectories = []
+    argmin, _, _ = gradient_descent(f=oracle, x0=initial_points[0], step_optimizer=optimizer, df=1e-7,
                                              iterations=100, dx=1e-7)
-    return argmin, trajectory
+    for point in initial_points:
+        _, _, trajectory = gradient_descent(f=oracle, x0=point, step_optimizer=optimizer, df=1e-7, iterations=100, dx=1e-7)
+        trajectories.append(trajectory)
+    return argmin, trajectories
 
 
 def generate_graph(f: Callable[[float, float], float], jacobi: Callable[[float, float], np.ndarray],
                    representation: str,
                    func_name: str,
-                   xl: float, xr: float, yl: float, yr: float):
-    def ternary_search(g):
-        return Optimizer(g, (0, 2), 0.001)
+                   xl: float, xr: float, yl: float, yr: float, points: list[np.ndarray]):
+    def build_optimizer(op):
+        return lambda g: op(g, (0, 0.5), 0.01)
 
-    def binary_search(g):
-        return BisectionOptimizer(g, (0, 2), 0.001)
-
-    def golden_ratio(g):
-        return GoldenRatioOptimizer(g, (0, 2), 0.001)
-
-    optimizers = [ternary_search, golden_ratio, binary_search]
+    optimizers = list(map(build_optimizer, [Optimizer, BisectionOptimizer, GoldenRatioOptimizer]))
     trajectory_names = ['Ternary search', 'Golden ratio', 'Binary search']
-    descent_results = list(map(lambda op: compute_trajectory(f, jacobi, op), optimizers))
+    trajectory_colors = ['r', 'b', 'g']
+    descent_results = list(map(lambda op: compute_trajectory(f, jacobi, op, points), optimizers))
     argmin = descent_results[0][0]
 
     v_func = np.vectorize(lambda x, y: f(x, y))
@@ -43,21 +39,27 @@ def generate_graph(f: Callable[[float, float], float], jacobi: Callable[[float, 
                          np.linspace(yl, yr, 100))
 
     fig, ax = plt.subplots()
-    qx = ax.contour(xx, yy, v_func(xx, yy), [f(argmin[0], argmin[1]) + i for i in range(-5, 5)],
+    qx = ax.contour(xx, yy, v_func(xx, yy), [f(argmin[0], argmin[1]) + float(i)/3.0 for i in range(-10, 10)],
                     linestyles=('solid'))
-    for (_, trajectory), trajectory_name in zip(descent_results, trajectory_names):
-        __plot_trajectory(ax, trajectory, trajectory_name)
-    ax.clabel(qx, fontsize=9, fmt='%.1f', inline=1)
+    for (_, trajectories), trajectory_name, color in zip(descent_results, trajectory_names, trajectory_colors):
+        __plot_trajectory(ax, trajectories, trajectory_name, color)
+    ax.clabel(qx, fontsize=5, fmt='%.1f', inline=1)
     ax.legend()
     ax.set_title(func_name)
     plt.savefig("results/" + representation + ".png")
     plt.show()
 
 
-def __plot_trajectory(ax, trajectory: List[np.ndarray], name: str):
-    x_trajectories = list(map(lambda t: t[0], trajectory))
-    y_trajectories = list(map(lambda t: t[1], trajectory))
-    ax.plot(x_trajectories, y_trajectories, label=name)
+def __plot_trajectory(ax, trajectories: list[list[np.ndarray]], name: str, color: str):
+    ok = False
+    for trajectory in trajectories:
+        x_trajectories = list(map(lambda t: t[0], trajectory))
+        y_trajectories = list(map(lambda t: t[1], trajectory))
+        if not ok:
+            ax.plot(x_trajectories, y_trajectories, color, marker=',', linewidth=1, markersize=1, label=name)
+            ok = True
+        else:
+            ax.plot(x_trajectories, y_trajectories, color, marker=',',  linewidth=1, markersize=1)
 
 
 def draw_all():
@@ -69,7 +71,9 @@ def draw_all():
                 lambda x, y: np.array([2 * x + y, 6 * y + x])]
     representations = ["func_1", "func_2", "func_3"]
     function_names = ["x^2 - 3xy + 5y^2", "4x^2 + 20y^2", "x^2 + xy + 3y^2"]
-    ranges = [(-3.0, 4.5, -3.0, 3.0), (-5, 5, -0.5, 0.5), (-4.0, 4.0, -2.0, 2.0)]
-    initial_points = [[], [], []]
+    ranges = [(-2.0, 2.0, -1.5, 1.5), (-2.3, 3.0, -0.5, 1.0), (-2.5, 2.5, -1.5, 2.0)]
+    initial_points = [[np.array([-0.5, 0.5]), np.array([1.0, -0.5])],
+                      [np.array([2.0, 0.5]), np.array([-2.0, 0.5])],
+                      [np.array([2.0, 1.5]), np.array([-1.0, 1.0])]]
     for f, jacobi, repr, f_name, (xl, xr, yl, yr), points in zip(functions, jacobies, representations, function_names, ranges, initial_points):
         generate_graph(f, jacobi, repr, f_name, xl, xr, yl, yr, points)

@@ -12,7 +12,7 @@ def gradient_descent(
 ) -> Tuple[np.ndarray, int, List[np.ndarray]]:
     x = x0
     it = 0
-    trajectory = []
+    trajectory = [x]
     while (iterations is None) or (it < iterations):
         grad = f.grad(*x)
 
