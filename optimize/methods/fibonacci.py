@@ -4,22 +4,27 @@ from optimize.optimizer import Optimizer
 
 
 class FibonacciOptimizer(Optimizer):
-    def __init__(self, f: Callable[[float], float], bounds: Tuple[float, float], eps: float, a, b, window):
+    def __init__(self, f: Callable[[float], float], bounds: Tuple[float, float], eps: float):
         super().__init__(f, bounds, eps)
         self.F = []
-        self.n = self.genF(a, b, window)
+
+        a0 = bounds[0]
+        b0 = bounds[1]
+
+        self.n = self.genF(a0, b0, eps)
+
 
         self.l = [0.0] * self.n
-        self.l[0] = a + self.F[self.n - 2] / self.F[self.n] * (b - a)
+        self.l[0] = a0 + self.F[self.n - 2] / self.F[self.n] * (b0 - a0)
 
         self.mu = [0.0] * self.n
-        self.mu[0] = a + self.F[self.n - 1] / self.F[self.n] * (b - a)
+        self.mu[0] = a0 + self.F[self.n - 1] / self.F[self.n] * (b0 - a0)
 
         self.a = [0.0] * self.n
-        self.a[0] = a
+        self.a[0] = a0
 
         self.b = [0.0] * self.n
-        self.b[0] = b
+        self.b[0] = b0
 
     def optimize(self) -> float:
         self.history = []
