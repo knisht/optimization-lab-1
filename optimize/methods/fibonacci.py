@@ -50,7 +50,7 @@ class FibonacciOptimizer(Optimizer):
                 self.a[n] = self.a[n - 1]
                 self.b[n] = self.mu[n]
 
-        return 0.0
+        return (self.a[n - 1] + self.b[n - 1]) / 2
 
     def genF(self, a, b, l):
         min = (b - a) / l
