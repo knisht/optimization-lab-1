@@ -39,6 +39,8 @@ class FibonacciOptimizer(Optimizer):
 
         if self.k != self.n - 2:
             self.k = k + 1
+            # TODO я добавил метод _log(a, b), надо вызывать его каждый раз, когда выбираешь новые границы
+            # в начале optimize надо будет делать self.history = []
             return self.a[k], self.b[k]
 
         self.l[self.n] = self.l[self.n - 1]
