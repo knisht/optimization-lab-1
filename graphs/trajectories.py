@@ -2,6 +2,7 @@ from typing import Callable, Tuple, List
 import numpy as np
 from common.oracle import Oracle
 from gradient import gradient_descent
+from optimize.methods.constant import ConstantOptimizer
 from optimize.optimizer import Optimizer
 from optimize.methods.fibonacci import FibonacciOptimizer
 from optimize.methods.bisection import BisectionOptimizer
@@ -51,10 +52,10 @@ def __build_optimizer(op):
     return lambda g: op(g, (0, 0.5), 0.05)
 
 
-optimizers = list(map(__build_optimizer, [Optimizer, BisectionOptimizer, GoldenRatioOptimizer, FibonacciOptimizer]))
-# optimizers.append(lambda g: FibonacciOptimizer(f, (0, 0.5), 0.05, 0, 0.5, 0.5))
-optimizer_names = ['Ternary search', 'Golden ratio', 'Binary search', 'Fibonacci']
-optimizer_colors = ['r', 'b', 'g', 'k']
+optimizers = list(map(__build_optimizer, [Optimizer, BisectionOptimizer, GoldenRatioOptimizer, FibonacciOptimizer,
+                                          lambda g, b, eps: ConstantOptimizer(g, b, eps, 0.05)]))
+optimizer_names = ['Ternary search', 'Golden ratio', 'Binary search', 'Fibonacci', 'Constant']
+optimizer_colors = ['r', 'b', 'g', 'k', 'm']
 
 
 def __plot_trajectory(ax, trajectories: List[List[np.ndarray]], name: str, color: str):
