@@ -8,6 +8,7 @@ class Optimizer:
         self.eps = eps
         self.n = 0
         self.history: List[Tuple[float, float]] = []
+        self.f_calls = 0
 
     def _log(self, a: float, b: float):
         self.history.append((a, b))
@@ -25,6 +26,7 @@ class Optimizer:
         self._log(a, b)
 
         while b - a > self.eps:
+            self.f_calls += 2
             x1, x2 = self._step(a, b)
             if self.f(x1) < self.f(x2):
                 b = x2

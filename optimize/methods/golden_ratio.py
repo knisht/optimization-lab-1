@@ -5,20 +5,38 @@ from optimize.optimizer import Optimizer
 
 
 class GoldenRatioOptimizer(Optimizer):
-    fi = 0.5 + sqrt(5) / 2  # 1.618
+    phi = 0.5 + sqrt(5) / 2  # 1.618
+    resphi = 2 - phi
 
     def _step(self, a: float, b: float) -> Tuple[float, float]:
-        x1 = b - (b - a) / GoldenRatioOptimizer.fi
-        x2 = a + (b - a) / GoldenRatioOptimizer.fi
+        x1 = b - (b - a) / GoldenRatioOptimizer.phi
+        x2 = a + (b - a) / GoldenRatioOptimizer.phi
         return x1, x2
 
     def optimize_lin(self) -> float:
         a = self.bounds[0]
         b = self.bounds[1]
-        self.history = []
+        self.history = [(a, b)]
         self.n = 0
-        while b - a > self.eps:
-            self.n += 1
-            a, b = self._step(a, b)
-            self.history.append((a, b))
-        return (a + b) / 2
+
+        x1, x2 = self._step(a, b)
+        self.history.append((a, b))
+        f1 = self.f(x1)
+        f2 = self.f(x2)
+        self.f_calls = 2
+        while abs(b - a) > self.eps:
+            if f1 < f2:
+                b = x2
+                x2 = x1
+                f2 = f1
+                x1 = a + self.resphi * (b - a)
+                f1 = self.f(x1)
+            else:
+                a = x1
+                x1 = x2
+                f1 = f2
+                x2 = b - self.resphi * (b - a)
+                f2 = self.f(x2)
+            self.f_calls += 1
+
+        return (x1 + x2) / 2
