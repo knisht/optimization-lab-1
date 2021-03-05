@@ -20,7 +20,6 @@ class GoldenRatioOptimizer(Optimizer):
         self.n = 0
 
         x1, x2 = self._step(a, b)
-        self.history.append((a, b))
         f1 = self.f(x1)
         f2 = self.f(x2)
         self.f_calls = 2

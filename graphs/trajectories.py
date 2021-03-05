@@ -120,8 +120,8 @@ def generate_bounds_graph(f: Callable[[float, float], float], fn_name: str, l, r
         names = ['BisectionOptimizer', 'GoldenRatioOptimizer', 'FibonacciOptimizer']
         colors = ['r', 'b', 'y']
         for op, optimizer_name, color in zip(ops,names, colors):
-            a = [l] + [it[0] for it in op.history]
-            b = [r] + [it[1] for it in op.history]
+            a = [it[0] for it in op.history]
+            b = [it[1] for it in op.history]
             iters = list(range(len(b)))
             ax.plot(iters, a, color, label=f"{optimizer_name};  f_calls_cnt: {op.f_calls}", marker="o", markersize = 4)
             ax.plot(iters, b, color, marker="o", markersize = 4)
