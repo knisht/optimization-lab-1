@@ -30,4 +30,4 @@ class BisectionOptimizer(Optimizer):
             self.n += 1
             a, b = self._step(a, b)
             self.history.append((a, b))
-        return (a - b) / 2
+        return (b - a) / 2
