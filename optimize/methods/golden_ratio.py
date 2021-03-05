@@ -21,4 +21,4 @@ class GoldenRatioOptimizer(Optimizer):
             self.n += 1
             a, b = self._step(a, b)
             self.history.append((a, b))
-        return (b - a) / 2
+        return (a + b) / 2

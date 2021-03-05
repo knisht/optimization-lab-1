@@ -27,6 +27,7 @@ class FibonacciOptimizer(Optimizer):
 
     def optimize(self) -> float:
         self.history = []
+        self._log(self.a[0],self.b[0])
         lst = self.n - 1
         for k in range(self.n - 1):
             self._log(self.a[k], self.b[k])
@@ -65,6 +66,3 @@ class FibonacciOptimizer(Optimizer):
         while self.F[-1] < min:
             self.F.append(self.F[-1] + self.F[-2])
         return len(self.F)
-
-    def optimize_lin(self) ->float:
-        return self.optimize()
