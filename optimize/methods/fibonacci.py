@@ -14,9 +14,9 @@ class FibonacciOptimizer(Optimizer):
         self.n = self.genF(a0, b0, eps)
 
     def optimize(self) -> float:
-        self.history = []
         a = self.bounds[0]
         b = self.bounds[1]
+        self.history = [(a, b)]
         x1 = a + self.F[self.n] / self.F[self.n + 2] * (b - a)
         x2 = a + self.F[self.n + 1] / self.F[self.n + 2] * (b - a)
         f1, f2 = self.f(x1), self.f(x2)
