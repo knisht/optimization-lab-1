@@ -34,7 +34,7 @@ class FibonacciOptimizer(Optimizer):
                 x2 = x1
                 x1 = a + self.F[self.n - i] / self.F[self.n + 2 - i] * (b - a)
                 f1 = self.f(x1)
-                self.f_calls += 1
+            self.f_calls += 1
             self._log(a, b)
         return (a + b) / 2
 
