@@ -44,7 +44,7 @@ class FibonacciOptimizer(Optimizer):
         n = 2
         while self.F[-1] < min:
             self.F.append(self.F[-1] + self.F[-2])
-        n = len(self.F)
+        n = len(self.F) - 1
         self.F.append(self.F[-1] + self.F[-2])
         self.F.append(self.F[-1] + self.F[-2])
         self.F.append(self.F[-1] + self.F[-2])
