@@ -123,8 +123,8 @@ def generate_bounds_graph(f: Callable[[float, float], float], fn_name: str, l, r
             a = [l] + [it[0] for it in op.history]
             b = [r] + [it[1] for it in op.history]
             iters = list(range(len(b)))
-            ax.plot(iters, a, color, label=f"{optimizer_name};  f_calls_cnt: {op.f_calls}")
-            ax.plot(iters, b, color)
+            ax.plot(iters, a, color, label=f"{optimizer_name};  f_calls_cnt: {op.f_calls}", marker="o", markersize = 4)
+            ax.plot(iters, b, color, marker="o", markersize = 4)
         ax.legend()
         ax.set_title(f"f = {fn_name}, e = {e}")
         plt.savefig("results/" + f'lin-eps-{e}' + ".png")
