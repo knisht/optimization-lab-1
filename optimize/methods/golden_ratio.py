@@ -13,7 +13,7 @@ class GoldenRatioOptimizer(Optimizer):
         x2 = a + (b - a) / GoldenRatioOptimizer.phi
         return x1, x2
 
-    def optimize_lin(self) -> float:
+    def optimize(self) -> float:
         a = self.bounds[0]
         b = self.bounds[1]
         self.history = [(a, b)]
@@ -38,5 +38,6 @@ class GoldenRatioOptimizer(Optimizer):
                 x2 = b - self.resphi * (b - a)
                 f2 = self.f(x2)
             self.f_calls += 1
+            self.history.append((a, b))
 
         return (x1 + x2) / 2

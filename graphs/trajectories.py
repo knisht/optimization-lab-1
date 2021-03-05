@@ -115,7 +115,8 @@ def generate_bounds_graph(f: Callable[[float, float], float], fn_name: str, l, r
         for op in ops:
            results.append(op.optimize())
         fig, ax = plt.subplots()
-        #ax.set_xlabel('-log_10(eps)')
+        ax.set_xlabel('iterations')
+        ax.set_ylabel('x')
         names = ['BisectionOptimizer', 'GoldenRatioOptimizer', 'FibonacciOptimizer']
         colors = ['r', 'b', 'y']
         for op, optimizer_name, color in zip(ops,names, colors):
