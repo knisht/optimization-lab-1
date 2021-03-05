@@ -126,7 +126,7 @@ def generate_bounds_graph(f: Callable[[float, float], float], fn_name: str, l, r
             ax.plot(iters, b, color)
         ax.legend()
         ax.set_title(f"f = {fn_name}, e = {e}")
-        plt.savefig("results/" + f'1-{e}' + ".png")
+        plt.savefig("results/" + f'lin-eps-{e}' + ".png")
         plt.show()
 
 
