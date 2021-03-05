@@ -22,7 +22,7 @@ class GoldenRatioOptimizer(Optimizer):
         x1, x2 = self._step(a, b)
         f1 = self.f(x1)
         f2 = self.f(x2)
-        self.f_calls = 2
+        self.f_calls = 1
         while abs(b - a) > self.eps:
             if f1 < f2:
                 b = x2
