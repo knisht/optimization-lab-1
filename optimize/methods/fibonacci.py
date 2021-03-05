@@ -65,3 +65,6 @@ class FibonacciOptimizer(Optimizer):
         while self.F[-1] < min:
             self.F.append(self.F[-1] + self.F[-2])
         return len(self.F)
+
+    def optimize_lin(self) ->float:
+        return self.optimize()

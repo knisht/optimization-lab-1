@@ -108,7 +108,36 @@ def generate_iterations_graph(
     plt.show()
 
 
+def generate_bounds_graph(f: Callable[[float, float], float], fn_name: str, l, r, esps: List[float]):
+    for e in esps:
+        ops = list(map(lambda op: op(f, (l, r), e), [BisectionOptimizer, GoldenRatioOptimizer, FibonacciOptimizer]))
+        results = []
+        for op in ops:
+           results.append(op.optimize_lin())
+        fig, ax = plt.subplots()
+        #ax.set_xlabel('-log_10(eps)')
+        names = ['BisectionOptimizer', 'GoldenRatioOptimizer', 'FibonacciOptimizer']
+        colors = ['r', 'b', 'g']
+        for op, optimizer_name, color in zip(ops,names, colors):
+            a = [l] + [it[0] for it in op.history]
+            b = [r] + [it[1] for it in op.history]
+            iters = list(range(op.n + 1))
+            ax.plot(iters, a, color, label=f"{optimizer_name} l")
+            ax.plot(iters, b, color, label=f"{optimizer_name} r")
+        ax.legend()
+        ax.set_title(f"f = {fn_name}, e = {e}")
+        plt.savefig("results/" + f'1-{e}' + ".png")
+        plt.show()
+
+
 def draw_all():
+
+
+    # 1
+    fn = lambda x: x ** 3  - 3 * (x **2) - 4 * x + 10
+    generate_bounds_graph(fn, "x^3 - 3x^2 - 4x + 1", -20, 0, [1, 0.1, 0.01, 0.001])
+
+
     functions = [lambda x, y: x * x - 3 * x * y + 5 * y * y,
                  lambda x, y: 4 * x * x + 20 * y * y,
                  lambda x, y: x * x + x * y + 3 * y * y]

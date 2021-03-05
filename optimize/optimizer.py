@@ -6,6 +6,7 @@ class Optimizer:
         self.f = f
         self.bounds = bounds
         self.eps = eps
+        self.n = 0
         self.history: List[Tuple[float, float]] = []
 
     def _log(self, a: float, b: float):
