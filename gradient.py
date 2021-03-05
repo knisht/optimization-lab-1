@@ -32,16 +32,16 @@ def gradient_descent(
     return x, it, trajectory
 
 
-def linear_search(f: Oracle, bounds: Tuple[np.ndarray, np.ndarray], dx: float) -> float:
-    x, x1 = bounds[0], np.zeros((f.dim,))
+def linear_search(f: Oracle, bounds: Tuple[np.ndarray, np.ndarray], dx: float) -> np.ndarray:
+    x, x1 = bounds[0], np.zeros((f.n,))
     v = f(*x)
 
     def iterate(dim: int):
         nonlocal x, x1, v
-        if dim == oracle.n:
+        if dim == f.n:
             v1 = f(*x1)
             if v1 < v:
-                x, v = x1, v1
+                x, v = x1.copy(), v1
         else:
             ticks = np.arange(bounds[0][dim], bounds[1][dim], dx)
             for i in ticks:
