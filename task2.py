@@ -2,9 +2,9 @@ from math import exp
 
 import numpy as np
 
-from OptimizationResult import OptimizationResult
+from optimize.multidimensional.OptimizationResult import OptimizationResult
 from common.oracle import Oracle
-from optimize.methods.fibonacci import FibonacciOptimizer
+from optimize.unidimensional.fibonacci import FibonacciOptimizer
 
 from optimize.multidimensional.ConjugateGradients import ConjugateGradients
 from optimize.multidimensional.GradientDescent import GradientDescent

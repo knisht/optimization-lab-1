@@ -1,8 +1,7 @@
-from typing import Callable, Optional, Any, Tuple
+from typing import Callable, Any, Tuple
 
 import numpy as np
 
-from OptimizationResult import OptimizationResult
 from common.oracle import Oracle
 from optimize.multidimensional.MultiOptimizer import MultiOptimizer
 from optimize.optimizer import Optimizer

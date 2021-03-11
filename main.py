@@ -2,7 +2,7 @@ from conjugate_gradients import conjugate_gradients
 from forms.quadratic import generate_random_form
 from graphs.trajectories import draw_all
 from newton import newton
-from optimize.methods.fibonacci import FibonacciOptimizer
+from optimize.unidimensional.fibonacci import FibonacciOptimizer
 from optimize.optimizer import Optimizer
 from common.oracle import Oracle
 from gradient import gradient_descent, linear_search

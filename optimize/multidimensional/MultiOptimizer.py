@@ -2,7 +2,7 @@ from typing import Callable, Optional, Any, Tuple
 
 import numpy as np
 
-from OptimizationResult import OptimizationResult
+from optimize.multidimensional.OptimizationResult import OptimizationResult
 from common.oracle import Oracle
 from optimize.optimizer import Optimizer
 

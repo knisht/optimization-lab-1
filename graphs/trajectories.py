@@ -2,11 +2,11 @@ from typing import Callable, Tuple, List
 import numpy as np
 from common.oracle import Oracle
 from gradient import gradient_descent
-from optimize.methods.constant import ConstantOptimizer
+from optimize.unidimensional.constant import ConstantOptimizer
 from optimize.optimizer import Optimizer
-from optimize.methods.fibonacci import FibonacciOptimizer
-from optimize.methods.bisection import BisectionOptimizer
-from optimize.methods.golden_ratio import GoldenRatioOptimizer
+from optimize.unidimensional.fibonacci import FibonacciOptimizer
+from optimize.unidimensional.bisection import BisectionOptimizer
+from optimize.unidimensional.golden_ratio import GoldenRatioOptimizer
 from matplotlib import pyplot as plt
 
 
