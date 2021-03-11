@@ -4,10 +4,11 @@ import numpy as np
 
 from OptimizationResult import OptimizationResult
 from common.oracle import Oracle
-from conjugate_gradients import conjugate_gradients
-from gradient import gradient_descent
 from optimize.methods.fibonacci import FibonacciOptimizer
-from newton import newton
+
+from optimize.multidimensional.ConjugateGradients import ConjugateGradients
+from optimize.multidimensional.GradientDescent import GradientDescent
+from optimize.multidimensional.Newton import Newton
 
 
 def print_info(result: OptimizationResult, name: str, functions: list):
@@ -54,18 +55,18 @@ if __name__ == '__main__':
         print(i)
         print(x0)
         f = Oracle(2, functions[i], gradients[i], hesse[i])
-        descent_result = gradient_descent(f, x0,
-                                          lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
-                                          dx=1e-5, df=1e-6, iterations=2000)
+        descent_result = GradientDescent().run(f, x0,
+                                               lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
+                                               dx=1e-5, df=1e-6, iterations=2000)
         print_info(descent_result, "Gradient descent", functions)
         # print(f"trajectory: {descent_result.trajectory}")
-        conj_result = conjugate_gradients(f, x0,
-                                          lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
-                                          dx=1e-5, df=1e-6, iterations=2000)
+        conj_result = ConjugateGradients().run(f, x0,
+                                               lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
+                                               dx=1e-5, df=1e-6, iterations=2000)
         print_info(conj_result, "Conjugate gradients", functions)
         # print(f"trajectory: {conj_result.trajectory}")
 
-        newton_result = newton(f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
-                               dx=1e-5, df=1e-6, iterations=2000)
+        newton_result = Newton().run(f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
+                                     dx=1e-5, df=1e-6, iterations=2000)
         print_info(newton_result, "Newton", functions)
         # print("======================")
