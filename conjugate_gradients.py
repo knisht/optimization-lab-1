@@ -7,23 +7,36 @@ from common.oracle import Oracle
 from optimize.optimizer import Optimizer
 
 
-def gradient_descent(
+def __square(w: np.ndarray) -> float:
+    return w.dot(w)
+
+
+def conjugate_gradients(
         f: Oracle, x0: np.ndarray, step_optimizer: Callable[[Callable], Optimizer],
         iterations: Optional[int] = None, dx: Optional[float] = None, df: Optional[float] = None
 ) -> OptimizationResult:
     x = x0
     it = 0
     trajectory = [x]
+    ws = []
+    ps = []
     cause = None
     while (iterations is None) or (it < iterations):
-        # print("grad x: ", x)
-        grad = f.grad(*x)
+        ws.append(-f.grad(*x))  # w_k
+        gamma = 0.0 if it % len(x0) == 0 else __square(ws[-1]) / __square(ws[-2])
+        p = ws[-1]
+        if gamma != 0.0:
+            p += gamma * ps[-1]
+        ps.append(p)
 
         def g(lmbd):
-            return f(*(x - grad * lmbd))
+            return f(*(x + p * lmbd))
 
-        delta = grad * step_optimizer(g).optimize()
-        x1 = x - delta
+        # print(ws[-1])
+        delta = p * step_optimizer(g).optimize()
+        x1 = x + delta
+        # print(f"current point: {x};\nw: {ws[-1]};\ndelta:{delta};\n")
+
         trajectory.append(x1)
         if dx is not None and np.linalg.norm(delta) < dx:
             cause = "Exceed limit of accuracy for argument"
@@ -36,27 +49,6 @@ def gradient_descent(
             break
         it += 1
         x = x1
-
     if cause is None:
         cause = "Exceed limit of iterations"
     return OptimizationResult(x, it, trajectory, cause)
-
-
-def linear_search(f: Oracle, bounds: Tuple[np.ndarray, np.ndarray], dx: float) -> np.ndarray:
-    x, x1 = bounds[0], np.zeros((f.n,))
-    v = f(*x)
-
-    def iterate(dim: int):
-        nonlocal x, x1, v
-        if dim == f.n:
-            v1 = f(*x1)
-            if v1 < v:
-                x, v = x1.copy(), v1
-        else:
-            ticks = np.arange(bounds[0][dim], bounds[1][dim], dx)
-            for i in ticks:
-                x1[dim] = i
-                iterate(dim + 1)
-
-    iterate(0)
-    return x

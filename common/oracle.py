@@ -1,4 +1,4 @@
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Union
 
 import numpy as np
 
@@ -6,7 +6,8 @@ import numpy as np
 class Oracle:
     def __init__(
             self, n: int, f: Callable[..., float],
-            whitebox: Optional[Callable[..., np.ndarray]]
+            whitebox: Optional[Callable[..., np.ndarray]],
+            hesse: Union[Callable[..., List[List[float]]], None] = None
     ):
         """
         :param n: function input dimension
@@ -18,6 +19,7 @@ class Oracle:
         self.f = f
         self.whitebox = whitebox
         self.calls = 0
+        self.hesse_raw = hesse
 
     def __call__(self, *args):
         assert len(args) == self.n
@@ -41,6 +43,16 @@ class Oracle:
             args[i] -= step
 
         return grad
+
+    def hesse(self, *args) -> np.ndarray:
+        assert len(args) == self.n
+        assert self.hesse is not None
+        hessian = np.zeros((self.n, self.n))
+        at_point = self.hesse_raw(*args)
+        for i in range(self.n):
+            for j in range(self.n):
+                hessian[i][j] = at_point[i][j]
+        return hessian
 
     def stats(self):
         return {
