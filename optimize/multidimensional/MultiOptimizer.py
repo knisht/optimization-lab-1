@@ -18,6 +18,9 @@ class MultiOptimizer:
                   payload: Any) -> Tuple[np.ndarray, Any]:
         pass
 
+    def name(self) -> str:
+        pass
+
     def run(self, f: Oracle, x0: np.ndarray,
             step_optimizer: Callable[[Callable], Optimizer],
             iterations: Optional[int] = None,
@@ -41,9 +44,12 @@ class MultiOptimizer:
             if x.dot(x) > 1e10:
                 cause = "Divergence"
                 break
+            if np.linalg.norm(f.grad(*x)) < 1e-10:
+                cause = "Plateau"
+                break
             iteration_count += 1
             x = x1
 
         if cause is None:
             cause = "Exceed limit of iterations"
-        return OptimizationResult(x, iteration_count, trajectory, cause)
+        return OptimizationResult(x0, x, iteration_count, trajectory, cause, f, self.name())

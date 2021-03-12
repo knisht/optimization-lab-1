@@ -1,7 +1,7 @@
-from typing import Callable, Tuple, List
+from typing import Callable, Tuple, List, Optional
 import numpy as np
 from common.oracle import Oracle
-from gradient import gradient_descent
+# from gradient import gradient_descent
 from optimize.unidimensional.constant import ConstantOptimizer
 from optimize.optimizer import Optimizer
 from optimize.unidimensional.fibonacci import FibonacciOptimizer
@@ -58,16 +58,11 @@ optimizer_names = ['Ternary search', 'Golden ratio', 'Binary search', 'Fibonacci
 optimizer_colors = ['r', 'b', 'g', 'k', 'm']
 
 
-def __plot_trajectory(ax, trajectories: List[List[np.ndarray]], name: str, color: str):
-    ok = False
-    for trajectory in trajectories:
-        x_trajectories = list(map(lambda t: t[0], trajectory))
-        y_trajectories = list(map(lambda t: t[1], trajectory))
-        if not ok:
-            ax.plot(x_trajectories, y_trajectories, color, marker=',', linewidth=1, markersize=1, label=name)
-            ok = True
-        else:
-            ax.plot(x_trajectories, y_trajectories, color, marker=',', linewidth=1, markersize=1)
+def __plot_trajectory(ax, trajectory: List[np.ndarray], name: str, color: str):
+    x_trajectories = list(map(lambda t: t[0], trajectory))
+    y_trajectories = list(map(lambda t: t[1], trajectory))
+    ax.plot(x_trajectories[0], y_trajectories[0], color=color, marker='X', markersize=5)
+    ax.plot(x_trajectories, y_trajectories, color=color, marker='x', linewidth=0.3, markersize=1, label=name)
 
 
 def generate_trajectories_graph(
@@ -113,18 +108,18 @@ def generate_bounds_graph(f: Callable[[float, float], float], fn_name: str, l, r
         ops = list(map(lambda op: op(f, (l, r), e), [BisectionOptimizer, GoldenRatioOptimizer, FibonacciOptimizer]))
         results = []
         for op in ops:
-           results.append(op.optimize())
+            results.append(op.optimize())
         fig, ax = plt.subplots()
         ax.set_xlabel('iterations')
         ax.set_ylabel('x')
         names = ['BisectionOptimizer', 'GoldenRatioOptimizer', 'FibonacciOptimizer']
         colors = ['r', 'b', 'y']
-        for op, optimizer_name, color in zip(ops,names, colors):
+        for op, optimizer_name, color in zip(ops, names, colors):
             a = [it[0] for it in op.history]
             b = [it[1] for it in op.history]
             iters = list(range(len(b)))
-            ax.plot(iters, a, color, label=f"{optimizer_name};  f_calls_cnt: {op.f_calls}", marker="o", markersize = 4)
-            ax.plot(iters, b, color, marker="o", markersize = 4)
+            ax.plot(iters, a, color, label=f"{optimizer_name};  f_calls_cnt: {op.f_calls}", marker="o", markersize=4)
+            ax.plot(iters, b, color, marker="o", markersize=4)
         ax.legend()
         ax.set_title(f"f = {fn_name}, e = {e}")
         plt.savefig("results/" + f'lin-eps-{e}' + ".png")
@@ -132,12 +127,9 @@ def generate_bounds_graph(f: Callable[[float, float], float], fn_name: str, l, r
 
 
 def draw_all():
-
-
     # 1
-    fn = lambda x: x ** 3  - 3 * (x **2) - 4 * x + 10
+    fn = lambda x: x ** 3 - 3 * (x ** 2) - 4 * x + 10
     generate_bounds_graph(fn, "x^3 - 3x^2 - 4x + 1", 2, 5, [1, 0.1, 0.01, 0.001, 0.000001])
-
 
     functions = [lambda x, y: x * x - 3 * x * y + 5 * y * y,
                  lambda x, y: 4 * x * x + 20 * y * y,

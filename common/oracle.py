@@ -7,7 +7,8 @@ class Oracle:
     def __init__(
             self, n: int, f: Callable[..., float],
             whitebox: Optional[Callable[..., np.ndarray]],
-            hesse: Union[Callable[..., List[List[float]]], None] = None
+            hesse: Union[Callable[..., np.ndarray], None] = None,
+            representation : Optional[str] = None
     ):
         """
         :param n: function input dimension
@@ -20,6 +21,7 @@ class Oracle:
         self.whitebox = whitebox
         self.calls = 0
         self.hesse_raw = hesse
+        self.representation = representation
 
     def __call__(self, *args):
         assert len(args) == self.n
@@ -47,12 +49,7 @@ class Oracle:
     def hesse(self, *args) -> np.ndarray:
         assert len(args) == self.n
         assert self.hesse is not None
-        hessian = np.zeros((self.n, self.n))
-        at_point = self.hesse_raw(*args)
-        for i in range(self.n):
-            for j in range(self.n):
-                hessian[i][j] = at_point[i][j]
-        return hessian
+        return self.hesse_raw(*args)
 
     def stats(self):
         return {
