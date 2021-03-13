@@ -33,6 +33,7 @@ def plot_trajectory(results: List[OptimizationResult]):
     min_value = min(list(map(lambda p: any_result.oracle.f(*p), all_points)))
     max_value = max(list(map(lambda p: any_result.oracle.f(*p), all_points)))
     min_point = min(list(map(lambda p: p.optimal_point, results)), key=lambda x: any_result.oracle.f(*x))
+    print(results[0].trajectory)
     qx = ax.contour(xx, yy, v_func(xx, yy), generate_level_markers(min_value, max_value),
                     linestyles='solid')
     ax.plot(min_point[0], min_point[1], color=color_roulette[0], marker='o', markersize=10)

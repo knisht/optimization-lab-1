@@ -29,7 +29,7 @@ class Newton(MultiOptimizer):
         correct_hesse = make_positive_definite(f.hesse(*x))
         inv_hes = np.linalg.inv(correct_hesse)
         p = inv_hes.dot(grad)
-        p = p / np.linalg.norm(p)
+        # p = p / np.linalg.norm(p)
 
         # print(f"p = {p}")
         def g(lmbd):
