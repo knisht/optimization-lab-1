@@ -66,20 +66,18 @@ if __name__ == '__main__':
             newton_results = []
             f = Oracle(2, functions[i], gradients[i], hesse[i], reprs[i])
             descent_result = GradientDescent().run(f, x0,
-                                                   lambda g: GoldenRatioOptimizer(g, (0.0, 100.01), 1e-5),
+                                                   lambda g: FibonacciOptimizer(g, (0.0, 100.01), 1e-7),
                                                    df=1e-6, iterations=50)
             descent_results.append(descent_result)
             conj_result = ConjugateGradients().run(f, x0,
                                                    lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-7),
                                                    df=1e-6, iterations=50)
             conjugate_results.append(conj_result)
-            newton_result = Newton().run(f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5), df=1e-7,
+            newton_result = Newton().run(f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-7), df=1e-6,
                                          iterations=50)
             newton_results.append(newton_result)
             plot_trajectory([descent_result, conj_result, newton_result])
 
-            plot_trajectory(descent_results)
-            plot_trajectory(conjugate_results)
             descent_result.print_info()
             conj_result.print_info()
             newton_result.print_info()
