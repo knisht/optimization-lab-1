@@ -83,5 +83,10 @@ if __name__ == '__main__':
             descent_result.print_info()
             conj_result.print_info()
             newton_result.print_info()
+
+            # print_point(*newton_result.trajectory[0])
+            # print_point(*newton_result.trajectory[-1])
+            # print(newton_result.iterations, end=' ')
+            # print_value(f.f(*newton_result.trajectory[-1]))
             print("====================")
         # plot_trajectory(newton_results)
