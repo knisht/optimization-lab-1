@@ -1,3 +1,4 @@
+import time
 import tracemalloc
 from typing import Callable, Optional, Any, Tuple
 
@@ -33,10 +34,14 @@ class MultiOptimizer:
         cause = None
         payload = self.init()
         memory_consumption = 0
+        elapsed_time = 0.0
         while (iterations is None) or (iteration_count < iterations):
             tracemalloc.start()
+            start_timestamp = time.time()
             x1, payload = self.iteration(f, x, step_optimizer, iteration_count, payload)
+            end_timestamp = time.time()
             res = tracemalloc.take_snapshot()
+            elapsed_time += end_timestamp - start_timestamp
             stats = res.statistics(cumulative=True, key_type='filename')
             for stat in stats:
                 memory_consumption += stat.size
@@ -59,4 +64,4 @@ class MultiOptimizer:
             x = x1
         if cause is None:
             cause = "Exceed limit of iterations"
-        return OptimizationResult(x0, x, iteration_count, trajectory, cause, f, self.name(), memory_consumption)
+        return OptimizationResult(x0, x, iteration_count, trajectory, cause, f, self.name(), memory_consumption, elapsed_time)
