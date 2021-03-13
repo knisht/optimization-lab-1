@@ -16,7 +16,7 @@ class GradientDescent(MultiOptimizer):
                   optimizer: Callable[[Callable], Optimizer],
                   iteration: int, payload: Any) -> Tuple[np.ndarray, Any]:
         pregrad = f.grad(*x)
-        grad = pregrad / np.linalg.norm(pregrad)
+        grad = pregrad #/ np.linalg.norm(pregrad)
         # print(f"point: {x}, grad: {grad} | {pregrad}")
 
         def g(lmbd):

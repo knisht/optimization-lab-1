@@ -24,7 +24,7 @@ class ConjugateGradients(MultiOptimizer):
         ws.append(-f.grad(*x))  # w_k
         gamma = 0.0 if iteration % len(x) == 0 else __square(ws[-1]) / __square(ws[-2])
         p = ws[-1]
-        p = p / np.linalg.norm(p)
+        p = p #/ np.linalg.norm(p)
         if gamma != 0.0:
             p += gamma * ps[-1]
         ps.append(p)

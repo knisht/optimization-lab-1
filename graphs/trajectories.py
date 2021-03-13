@@ -62,7 +62,8 @@ def __plot_trajectory(ax, trajectory: List[np.ndarray], name: str, color: str):
     x_trajectories = list(map(lambda t: t[0], trajectory))
     y_trajectories = list(map(lambda t: t[1], trajectory))
     ax.plot(x_trajectories[0], y_trajectories[0], color=color, marker='X', markersize=5)
-    ax.plot(x_trajectories, y_trajectories, color=color, marker='x', linewidth=0.3, markersize=1, label=name)
+    ax.plot(x_trajectories[-1], y_trajectories[-1], color=color, marker='s', markersize=5)
+    ax.plot(x_trajectories, y_trajectories, color=color, marker='x', linewidth=0.7, markersize=1, label=name)
 
 
 def generate_trajectories_graph(

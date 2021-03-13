@@ -59,33 +59,29 @@ if __name__ == '__main__':
         np.array([3.0, 2.0]),
         np.array([0.1, -0.5]),
     ]
+    for x0 in initial_points:
+        for i in range(3):
+            descent_results = []
+            conjugate_results = []
+            newton_results = []
+            f = Oracle(2, functions[i], gradients[i], hesse[i], reprs[i])
+            descent_result = GradientDescent().run(f, x0,
+                                                   lambda g: GoldenRatioOptimizer(g, (0.0, 100.01), 1e-5),
+                                                   df=1e-6, iterations=50)
+            descent_results.append(descent_result)
+            conj_result = ConjugateGradients().run(f, x0,
+                                                   lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-7),
+                                                   df=1e-6, iterations=50)
+            conjugate_results.append(conj_result)
+            newton_result = Newton().run(f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5), df=1e-7,
+                                         iterations=50)
+            newton_results.append(newton_result)
+            plot_trajectory([descent_result, conj_result, newton_result])
 
-    for i in range(3):
-        print(i, "\\")
-
-        descent_results = []
-        conjugate_results = []
-        newton_results = []
-        f = Oracle(2, functions[i], gradients[i], hesse[i], reprs[i])
-        for x0 in initial_points:
-            # descent_result = GradientDescent().run(f, x0,
-            #                                        lambda g: GoldenRatioOptimizer(g, (0.0, 100.01), 1e-5),
-            #                                        df=1e-12, iterations=1000)
-            # descent_results.append(descent_result)
-            # conj_result = ConjugateGradients().run(f, x0,
-            #                                        lambda g: FibonacciOptimizer(g, (0.0, 100.01), 1e-6),
-            #                                        df=1e-12, iterations=1000)
-            # conjugate_results.append(conj_result)
-            # newton_result = Newton().run(f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5), df=1e-6,
-            #                              iterations=50)
-            # newton_results.append(newton_result)
-            # print(newton_result.trajectory)
-            # print_point(*newton_result.trajectory[0])
-            # print_point(*newton_result.trajectory[-1])
-            # print(newton_result.iterations, end=' ')
-            # print_value(f.f(*newton_result.trajectory[-1]))
-            print()
-
-        # plot_trajectory(descent_results)
-        # plot_trajectory(conjugate_results)
+            plot_trajectory(descent_results)
+            plot_trajectory(conjugate_results)
+            descent_result.print_info()
+            conj_result.print_info()
+            newton_result.print_info()
+            print("====================")
         # plot_trajectory(newton_results)
