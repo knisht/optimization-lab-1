@@ -12,6 +12,15 @@ from optimize.multidimensional.GradientDescent import GradientDescent
 from optimize.multidimensional.Newton import Newton
 from optimize.unidimensional.golden_ratio import GoldenRatioOptimizer
 
+def print_value(x):
+    print("{0:0.3f}".format(x), end="")
+
+def print_point(x, y):
+    print("(", end='')
+    print_value(x)
+    print(", ", end='')
+    print_value(y)
+    print(")", end=' ')
 
 if __name__ == '__main__':
     functions = [lambda x, y: 100 * (y - x) ** 2 + (1 - x) ** 2,
@@ -50,8 +59,9 @@ if __name__ == '__main__':
         np.array([3.0, 2.0]),
         np.array([0.1, -0.5]),
     ]
+
     for i in range(3):
-        print(i)
+        print(i, "\\")
 
         descent_results = []
         conjugate_results = []
@@ -66,11 +76,16 @@ if __name__ == '__main__':
             #                                        lambda g: FibonacciOptimizer(g, (0.0, 100.01), 1e-6),
             #                                        df=1e-12, iterations=1000)
             # conjugate_results.append(conj_result)
-            newton_result = Newton().run(f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5), df=1e-6,
-                                         iterations=50)
-            newton_results.append(newton_result)
-            print(newton_result.trajectory)
+            # newton_result = Newton().run(f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5), df=1e-6,
+            #                              iterations=50)
+            # newton_results.append(newton_result)
+            # print(newton_result.trajectory)
+            # print_point(*newton_result.trajectory[0])
+            # print_point(*newton_result.trajectory[-1])
+            # print(newton_result.iterations, end=' ')
+            # print_value(f.f(*newton_result.trajectory[-1]))
+            print()
 
         # plot_trajectory(descent_results)
         # plot_trajectory(conjugate_results)
-        plot_trajectory(newton_results)
+        # plot_trajectory(newton_results)
