@@ -1,15 +1,22 @@
+from math import log, floor
 from typing import List
 
 import numpy as np
 import matplotlib.pyplot as plt
+import hashlib
 
 from graphs.trajectories import __plot_trajectory
 from optimize.multidimensional.OptimizationResult import OptimizationResult
 
 
 def generate_level_markers(minvalue: float, maxvalue: float):
-    level_separator = (maxvalue - minvalue * 0.9) / 15.0
-    return [minvalue + level_separator * float(i) for i in range(15)]
+    level_separator = (maxvalue - minvalue * 0.001) / 15.0
+    level_lines = [minvalue * 0.001 + level_separator * (1.1 ** i) * float(i) for i in range(15)]
+    if maxvalue < 0:
+        level_separator = (maxvalue * 0.5 - minvalue) / 15.0
+        level_lines = [minvalue + level_separator * float(i) for i in range(15)]
+        level_separator *= 2
+    return level_lines
 
 
 color_roulette = ["b", "g", "r", "c", "m", "y", "k", "lime", "navy", "darkred", "gold"]
@@ -42,5 +49,6 @@ def plot_trajectory(results: List[OptimizationResult]):
     ax.clabel(qx, fontsize=5, fmt='%.2f', inline=1)
     ax.legend()
     ax.set_title(any_result.oracle.representation + ", " + any_result.name)
-    plt.savefig("results/" + any_result.name + ".png", dpi=300)
+    repr_hash = int(hashlib.sha256(any_result.oracle.representation.encode('utf-8')).hexdigest(), 16) % 10 ** 8
+    plt.savefig(f"results/{any_result.name.replace(' ', '_')}__{str(repr_hash)}.png", dpi=300)
     plt.show()
