@@ -28,10 +28,10 @@ class OptimizationResult:
         info = [
             f'cause: {self.cause}',
             f'optimal point: {self.optimal_point}',
-            f'function value at point: {self.oracle.f(*self.optimal_point)}',
+            f'function value at point: {"{:.6f}".format(self.oracle.f(*self.optimal_point))}',
             f'iterations passed: {self.iterations}',
             f'memory: {self.memory_consumption} B',
-            f'elapsed time: {self.elapsed_time} s',
+            f'elapsed time: {1000 * self.elapsed_time} ms',
             f'arithmetic operations: {self.arithm_ops}',
             f'calls: {"/".join(list(map(str, self.calls)))}'
         ]
