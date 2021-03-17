@@ -3,7 +3,7 @@ import numpy as np
 from common.oracle import Oracle
 # from gradient import gradient_descent
 from optimize.unidimensional.constant import ConstantOptimizer
-from optimize.optimizer import Optimizer
+from optimize.unidimensional.optimizer import Optimizer
 from optimize.unidimensional.fibonacci import FibonacciOptimizer
 from optimize.unidimensional.bisection import BisectionOptimizer
 from optimize.unidimensional.golden_ratio import GoldenRatioOptimizer

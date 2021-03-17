@@ -1,6 +1,6 @@
 from typing import Callable, Tuple
 
-from optimize.optimizer import Optimizer
+from optimize.unidimensional.optimizer import Optimizer
 
 
 class ConstantOptimizer(Optimizer):

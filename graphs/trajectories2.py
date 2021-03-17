@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import hashlib
 
 from graphs.trajectories import __plot_trajectory
-from optimize.multidimensional.OptimizationResult import OptimizationResult
+from optimize.multidimensional.optimization_result import OptimizationResult
 
 
 def generate_level_markers(minvalue: float, maxvalue: float):

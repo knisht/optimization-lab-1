@@ -20,6 +20,8 @@ class Oracle:
         self.f = f
         self.whitebox = whitebox
         self.calls = 0
+        self.gcalls = 0
+        self.hcalls = 0
         self.hesse_raw = hesse
         self.representation = representation
 
@@ -28,11 +30,14 @@ class Oracle:
         self.calls += 1
         return self.f(*args)
 
-    def reset(self):
+    def reset_stat(self):
         self.calls = 0
+        self.gcalls = 0
+        self.hcalls = 0
 
     def grad(self, *args, step=None) -> np.ndarray:
         assert len(args) == self.n
+        self.gcalls += 1
         if self.whitebox is not None:
             return self.whitebox(*args)
 
@@ -48,10 +53,13 @@ class Oracle:
 
     def hesse(self, *args) -> np.ndarray:
         assert len(args) == self.n
-        assert self.hesse is not None
+        assert self.hesse_raw is not None
+        self.hcalls += 1
         return self.hesse_raw(*args)
 
     def stats(self):
         return {
-            'calls': self.calls
+            'calls': self.calls,
+            'gradient calls': self.gcalls,
+            'hessian calls': self.hcalls
         }

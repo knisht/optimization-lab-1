@@ -1,14 +1,19 @@
+from common.stats import StatCollector
 from typing import Callable, Tuple, List
 
 
 class Optimizer:
-    def __init__(self, f: Callable[[float], float], bounds: Tuple[float, float], eps: float):
+    def __init__(
+            self, f: Callable[[float], float], bounds: Tuple[float, float], eps: float,
+            stats: StatCollector = StatCollector()
+    ):
         self.f = f
         self.bounds = bounds
         self.eps = eps
         self.n = 0
         self.history: List[Tuple[float, float]] = []
         self.f_calls = 0
+        self._stats = stats
 
     def _log(self, a: float, b: float):
         self.history.append((a, b))

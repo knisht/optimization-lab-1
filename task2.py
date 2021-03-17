@@ -4,16 +4,18 @@ from typing import Callable
 import numpy as np
 
 from graphs.trajectories2 import plot_trajectory
-from optimize.multidimensional.OptimizationResult import OptimizationResult
+from optimize.multidimensional.optimization_result import OptimizationResult
 from common.oracle import Oracle
 from optimize.unidimensional.fibonacci import FibonacciOptimizer
-from optimize.multidimensional.ConjugateGradients import ConjugateGradients
-from optimize.multidimensional.GradientDescent import GradientDescent
-from optimize.multidimensional.Newton import Newton
+from optimize.multidimensional.conjugate_gradients import ConjugateGradients
+from optimize.multidimensional.gradient_descent import GradientDescent
+from optimize.multidimensional.newton import Newton
 from optimize.unidimensional.golden_ratio import GoldenRatioOptimizer
+
 
 def print_value(x):
     print("{0:0.3f}".format(x), end="")
+
 
 def print_point(x, y):
     print("(", end='')
@@ -21,6 +23,7 @@ def print_point(x, y):
     print(", ", end='')
     print_value(y)
     print(")", end=' ')
+
 
 if __name__ == '__main__':
     functions = [lambda x, y: 100 * (y - x) ** 2 + (1 - x) ** 2,
@@ -31,7 +34,7 @@ if __name__ == '__main__':
                  lambda x, y: np.array([-400 * (y - x ** 2) * x - 2 * (1 - x), 200 * (y - x ** 2)]),
                  lambda x, y: (-1.0) * np.array([2 * exp(-((x - 1) / 2) ** 2 - (y - 1) ** 2) * (-(x - 1) / 2) +
                                                  3 * exp(-((x - 2) / 3) ** 2 - ((y - 3) / 2) ** 2) * (2.0 / 3.0) * (
-                                                             -(x - 2) / 3),
+                                                         -(x - 2) / 3),
                                                  2 * exp(-((x - 1) / 2) ** 2 - (y - 1) ** 2) * (-2 * (y - 1)) +
                                                  3 * exp(-((x - 2) / 3) ** 2 - ((y - 3) / 2) ** 2) * (-((y - 3) / 2))])]
     hesse = [lambda x, y: np.array([[202, -200], [-200, 200]]),
