@@ -5,8 +5,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import hashlib
 
-from graphs.trajectories import __plot_trajectory
 from optimize.multidimensional.optimization_result import OptimizationResult
+
+
+def __plot_trajectory(ax, trajectory: List[np.ndarray], name: str, color: str):
+    x_trajectories = list(map(lambda t: t[0], trajectory))
+    y_trajectories = list(map(lambda t: t[1], trajectory))
+    ax.plot(x_trajectories[0], y_trajectories[0], color=color, marker='X', markersize=5)
+    ax.plot(x_trajectories[-1], y_trajectories[-1], color=color, marker='s', markersize=5)
+    ax.plot(x_trajectories, y_trajectories, color=color, marker='x', linewidth=0.7, markersize=1, label=name)
 
 
 def generate_level_markers(minvalue: float, maxvalue: float):
@@ -22,8 +29,10 @@ def generate_level_markers(minvalue: float, maxvalue: float):
 
 color_roulette = ["b", "g", "r", "c", "m", "y", "k", "lime", "navy", "darkred", "gold"]
 
+
 def hash(line: str) -> str:
     return str(int(hashlib.sha256(line.encode('utf-8')).hexdigest(), 16) % 10 ** 8)
+
 
 def plot_trajectory(results: List[OptimizationResult]):
     any_result = results[0]

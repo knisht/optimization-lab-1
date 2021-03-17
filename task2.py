@@ -63,42 +63,42 @@ if __name__ == '__main__':
         np.array([0.1, -0.5]),
     ]
 
-    for x0 in initial_points:
-        for i in range(3):
-            descent_results = []
-            conjugate_results = []
-            newton_results = []
-            f = Oracle(2, functions[i], gradients[i], hesse[i], reprs[i])
-            descent_result = GradientDescent().run(
-                f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
-                df=1e-6, iterations=50
-            )
-            descent_results.append(descent_result)
-            conj_result = ConjugateGradients().run(
-                f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
-                df=1e-6, iterations=50
-            )
-            conjugate_results.append(conj_result)
-            newton_result = Newton().run(
-                f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
-                df=1e-6, iterations=50
-            )
-            newton_results.append(newton_result)
-
-            # todo вот тут рисуется, я закомментил
-            # plot_trajectory([descent_result, conj_result, newton_result])
-            # todo вы тут в странном порядке запускаете, я снизу сделал удобный для таблиц вывод
-
-            # descent_result.print_info()
-            # conj_result.print_info()
-            # newton_result.print_info()
-
-            # print_point(*newton_result.trajectory[0])
-            # print_point(*newton_result.trajectory[-1])
-            # print(newton_result.iterations, end=' ')
-            # print_value(f.f(*newton_result.trajectory[-1]))
-            # print("====================")
-        # plot_trajectory(newton_results)
+    # for x0 in initial_points:
+    #     for i in range(3):
+    #         descent_results = []
+    #         conjugate_results = []
+    #         newton_results = []
+    #         f = Oracle(2, functions[i], gradients[i], hesse[i], reprs[i])
+    #         descent_result = GradientDescent().run(
+    #             f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
+    #             df=1e-6, iterations=50
+    #         )
+    #         descent_results.append(descent_result)
+    #         conj_result = ConjugateGradients().run(
+    #             f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
+    #             df=1e-6, iterations=50
+    #         )
+    #         conjugate_results.append(conj_result)
+    #         newton_result = Newton().run(
+    #             f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
+    #             df=1e-6, iterations=50
+    #         )
+    #         newton_results.append(newton_result)
+    #
+    #         # todo вот тут рисуется, я закомментил
+    #         plot_trajectory([descent_result, conj_result, newton_result])
+    #         # todo вы тут в странном порядке запускаете, я снизу сделал удобный для таблиц вывод
+    #
+    #         descent_result.print_info()
+    #         conj_result.print_info()
+    #         newton_result.print_info()
+    #
+    #         print_point(*newton_result.trajectory[0])
+    #         print_point(*newton_result.trajectory[-1])
+    #         print(newton_result.iterations, end=' ')
+    #         print_value(f.f(*newton_result.trajectory[-1]))
+    #         print("====================")
+    #     plot_trajectory(newton_results)
 
     it = 100
 

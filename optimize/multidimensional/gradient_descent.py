@@ -16,10 +16,7 @@ class GradientDescent(MultiOptimizer):
             self, f: Oracle, x: np.ndarray, optimizer: Callable[[Callable], Optimizer],
             iteration: int, payload: Any
     ) -> Tuple[np.ndarray, Any]:
-        pregrad = f.grad(*x)
-        grad = pregrad  # / np.linalg.norm(pregrad)
-
-        # print(f"point: {x}, grad: {grad} | {pregrad}")
+        grad = f.grad(*x)
 
         def g(lmbd):
             return f(*(x - grad * lmbd))
@@ -30,7 +27,6 @@ class GradientDescent(MultiOptimizer):
 
         delta = grad * coeff
         self._stats.report('*', grad.size)
-        # print(f"delta: {delta}, coeff: {coeff}")
         x1 = x - delta
         self._stats.report('-', x.size)
 
