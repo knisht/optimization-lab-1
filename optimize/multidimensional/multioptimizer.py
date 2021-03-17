@@ -76,8 +76,10 @@ class MultiOptimizer:
 
         arithm_stats = self._stats.arithm
         if len(self._stats.extra) > 0:
-            arithm_stats = f'[basic: {arithm_stats}, others: {",".join(list(map(str, self._stats.extra.items())))}]'
+            arithm_stats = f'{arithm_stats} (+{",".join(list(map(lambda x: str(x[1] * 15), self._stats.extra.items())))})'
+        calls = [self._stats.fcalls, self._stats.gcalls, self._stats.hcalls]
+
         return OptimizationResult(
             x0, x, iteration_count, trajectory, cause, f, self.name(),
-            self._stats.memory, self._stats.elapsed_time, arithm_stats
+            self._stats.memory, self._stats.elapsed_time, arithm_stats, calls
         )
