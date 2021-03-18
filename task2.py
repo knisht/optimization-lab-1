@@ -84,6 +84,7 @@ if __name__ == '__main__':
                 df=1e-6, iterations=it
             )
             conjugate_results.append(conj_result)
+            # print("----")
             newton_result = Newton().run(
                 f, x0, lambda g: FibonacciOptimizer(g, (0.0, 1.01), 1e-5),
                 df=1e-6, iterations=it
