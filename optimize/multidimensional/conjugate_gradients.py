@@ -45,7 +45,12 @@ class ConjugateGradients(MultiOptimizer):
         opt = optimizer(g)
         opt._stats = self._stats
         lr = opt.optimize()
-
+        # print(lr)
+        #
+        # print((ws[-1][0] * p[0] + ws[-1][1] * p[1]) /
+        #       ((202.0 * p[0] - 200 * p[1]) * p[0] +
+        #        (-200 * p[0] + 200 * p[1]) * p[1]))
+        # print(ws, p)
         delta = p * lr
         self._stats.report('*', p.size)
         # print(f"latest gradient(w): {ws[-1]}, p = {p}, delta = {delta}, x = {x}, gamma = {gamma}, lr = {lr}")
